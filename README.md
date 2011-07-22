@@ -1,7 +1,7 @@
-# Smoax: Simple Mock Ajax For Jasmine + JQuery
+# Smoax: Simple Mock Ajax For Jasmine + jQuery
 
-*  Requires Jasmine 1.0.2+ and JQuery 1.6+.
-*  Works with both ye-olde-style ajax success and error handlers and JQuery 1.5 deferreds.
+*  Requires Jasmine 1.0.2+ and jQuery 1.6+.
+*  Works with both ye-olde-style ajax success and error handlers and jQuery 1.5 deferreds.
 
 ## Usage
 
@@ -63,7 +63,7 @@ See the [tests](https://github.com/mtkopone/smoax/blob/master/spec/smoax-spec.js
 
 By default, smoax *synchronously* calls the success and error handlers of an ajax invocation. This is generally good enough, and simplifies test writing by not requiring all test code to be within `runs()` and `waitsFor()` blocks. In some special cases, asynchronous behaviour could be required, and can be enabled by using `smoax.registerAsync()`. It takes the same arguments as `smoax.register()`.
 
-Use `smoax.ajax()` instead of `$.ajax()` to access a non-mocked version of `JQuery.ajax()` to e.g. load example data from files.
+Use `smoax.ajax()` instead of `$.ajax()` to access a non-mocked version of `jQuery.ajax()` to e.g. load example data from files.
 
 
 
