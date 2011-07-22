@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jasmine Test Runner</title>
+  <link rel="stylesheet" type="text/css" href="jasmine-1.0.2/jasmine.css">
+  <script src="jquery-1.6.1.js"></script>
+  <script src="jasmine-1.0.2/jasmine.js"></script>
+  <script src="jasmine-1.0.2/jasmine-html.js"></script>
+  <script src="../jasmine-smoax.js"></script>
+  <script src="smoax-spec.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+  jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+  $(function() { jasmine.getEnv().execute(); });
+</script>
+</body>
+</html>
