@@ -24,12 +24,12 @@
 Basically,
 
     it('calls some ajax stuff', function() {
-	  // Register expected ajax calls and the responses that they should return
-	  smoax.register('GET', '/my/url.json', { data:'yeah' });
-      // Call the javascript-under-test that invokes ajax
-      myProductionCode.someMethod();
-      // Check that appropriate ajax calls were invoked
-      expect(smoax).toHaveBeenInvokedWith('get', '/my/url.json');
+	    // Register expected ajax calls and the responses that they should return
+	    smoax.register('GET', '/my/url.json', { data:'yeah' });
+        // Call the javascript-under-test that invokes ajax
+        myProductionCode.someMethod();
+        // Check that appropriate ajax calls were invoked
+        expect(smoax).toHaveBeenInvokedWith('get', '/my/url.json');
     });
 
 `smoax.register(method, url, responseData)` takes three parameters:
