@@ -1,6 +1,6 @@
 describe('smoax', function() {
   beforeEach(function() {
-    this.addMatchers(smoax.setup().matchers);
+    this.addMatchers(smoax.setup());
   });
   
   it('gets initialised', function() {
@@ -91,4 +91,17 @@ describe('smoax', function() {
     var response = smoax.ajax({type:'get', url:'../spec/smoax-spec.js', async:false});
     expect(response.responseText).toMatch(/^describe\('smoax/);
   });
+
+  it('can use a string response body', function() {
+    smoax.register('get', '/url', 'foo');
+    $.get('/url').success(function(data) { expect(data).toEqual('foo'); });
+    expect(smoax.calls.count).toEqual(1);
+  });
+
+  it('can use a function response body', function() {
+    smoax.register('get', '/url', function() { return 'foo'; });
+    $.get('/url').success(function(data) { expect(data).toEqual('foo'); });
+    expect(smoax.calls.count).toEqual(1);
+  });
+
 });

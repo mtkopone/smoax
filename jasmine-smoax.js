@@ -14,7 +14,7 @@ function Smoax() {
     this.handlers = new AjaxMap();
     this.calls = new AjaxMap();
     spyOn($, 'ajax').andCallFake(wrap);
-    return this;
+    return this.matchers;
   }
   
   function mockAjaxTransport(options, originalOptions, jqXHR) {
