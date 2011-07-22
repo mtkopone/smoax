@@ -18,6 +18,7 @@ describe('smoax', function() {
     expect(gotSyncCall).toEqual(true);
     expect(smoax).toHaveBeenInvoked();
     expect(smoax).toHaveBeenInvokedWith('get', '/url');
+    expect(smoax).not.toHaveBeenInvokedWith('get', '/urlX');
   });
   
   it('handles $.post', function() {
@@ -29,6 +30,7 @@ describe('smoax', function() {
     }, 'json');
     expect(gotSyncCall).toEqual(true);
     expect(smoax).toHaveBeenInvokedWith('post', '/url', { request:true });
+    expect(smoax).not.toHaveBeenInvokedWith('post', '/url', { request:false });
   });
   
   
@@ -106,4 +108,24 @@ describe('smoax', function() {
     $.get('/url').success(function(data) { expect(data).toEqual('foo'); });
     expect(smoax.calls.count).toEqual(1);
   });
+
+  it('uses readable error messages when method and url doesnt match expected', function() {
+    $.get('/first');
+    $.post('/second');
+    var obj = {};
+    var result = smoax.matchers.toHaveBeenInvokedWith.call(obj, 'get', '/second');
+    expect(result).toEqual(false);
+    expect(obj.message()[0]).toEqual('Expected GET /second to have been invoked. There have been calls to: GET /first, POST /second');
+    expect(obj.message()[1]).toEqual('Expected GET /second not to have been invoked. There have been calls to: GET /first, POST /second');
+  });
+
+  it('uses readable error messages when data doesnt match expected', function() {
+    $.post('/second', { data:'ok' });
+    var obj = {};
+    var result = smoax.matchers.toHaveBeenInvokedWith.call(obj, 'post', '/second', { data:'fail' });
+    expect(result).toEqual(false);
+    expect(obj.message()[0]).toEqual("Expected POST /second to have been invoked with 'data=fail' but was invoked with 'data=ok'");
+    expect(obj.message()[1]).toEqual("Expected POST /second not to have been invoked with 'data=fail'");
+  });
+
 });

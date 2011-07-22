@@ -1,7 +1,3 @@
-/*
- TODO: 
- * better warn messages when eg. data doesnt match expected
-*/
 var smoax = new Smoax();
 
 function Smoax() {
@@ -92,7 +88,7 @@ function Smoax() {
   }
   
   function warn(s) {
-    jasmine.getEnv().reporter.log('smoax: '+s);
+    jasmine.log('smoax: '+s);
   }
   
   this.matchers = {
@@ -104,45 +100,69 @@ function Smoax() {
       return me.latest !== undefined;
     },
     latestInvocationToHaveBeen: function(method, url, data) {
-      this.message = function() { return [
-          "Expected "+method+" "+url+" to have been invoked.",
-          "Expected "+method+" "+url+" not to have been invoked."
-      ]; };      
-      return match(me.latest, method, url, data);
+      return match(this, me.latest, method, url, data);
     },
     toHaveBeenInvokedWith: function(method, url, data) {
-      this.message = function() { return [
-          "Expected "+method+" "+url+" to have been invoked.",
-          "Expected "+method+" "+url+" not to have been invoked."
-      ]; };      
       var call = me.calls.get(method, url);
-      return match(call, method, url, data);
+      return match(this, call, method, url, data);
     }
   }
+
+  function requestErrorMessages(method, url) {
+    function calls2string() {
+      var s = '';
+      for (var key in me.calls.map) { s == '' ? s = key : s = s + ', ' + key; };
+      return s;
+    }
+    return function() {
+      var desc = key(method, url);
+      var details = me.calls.count == 0
+        && 'There have been no ajax calls.'
+        || 'There have been calls to: '+calls2string();
+      return [
+        "Expected "+desc+" to have been invoked. "+details,
+        "Expected "+desc+" not to have been invoked. "+details
+    ]; };
+  }
+  function dataErrorMessages(method, url, actualData, expectedData) {
+    var desc = key(method, url);
+    return function() { return [
+      "Expected "+desc+" to have been invoked with "+jasmine.pp(expectedData)+" but was invoked with "+jasmine.pp(actualData),
+      "Expected "+desc+" not to have been invoked with "+jasmine.pp(expectedData)
+    ]; };
+  }
   
-  function match(opts, method, url, data) {
-    return !!opts && !!opts.type
+  function match(that, opts, method, url, data) {
+    var requestMatch =  !!opts && !!opts.type
       && method.toUpperCase() == opts.type.toUpperCase()
-      && url == opts.url
-      && toParams(data) == opts.data;
+      && url == opts.url;
+   var expectedData = toParams(data);
+   var dataMatch = !!opts && expectedData == opts.data;
+   if (!requestMatch) {
+     that.message = requestErrorMessages(method, url);
+   } else if (!dataMatch) {
+     that.message = dataErrorMessages(method, url, opts.data, expectedData);
+   }
+   return requestMatch && dataMatch;
+  }
+
+  function key(method, url) {
+    return method.toUpperCase()+' '+url;
   }
   
   function AjaxMap() {
     this.count = 0;
     this.map = {};
-    this.key = function(method, url) {
-      return method.toUpperCase()+' '+url;
-    }
+
     this.get = function(method, url) {
-      var key = this.key(method, url);
-      return this.map[key];
+      return this.map[key(method, url)];
     };
     this.set = function(method, url, data) {
-      var key = this.key(method, url);
-      if (!this.map[key]) {
+      var k = key(method, url);
+      if (!this.map[k]) {
         this.count++;
       }
-      this.map[key] = data;
+      this.map[k] = data;
     }
     return this;
   }
