@@ -1,6 +1,7 @@
 # Smoax: Simple Mock Ajax For Jasmine + JQuery
 
-Requires JQuery 1.6+.
+*  Requires Jasmine 1.0.2+ and JQuery 1.6+.
+*  Works with both ye-olde-style ajax success and error handlers and JQuery 1.5 deferreds.
 
 ## Setup
 
