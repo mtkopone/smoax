@@ -88,6 +88,9 @@ describe('smoax', function() {
   });
   
   it('exposes real ajax', function() {
+    if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && document.location.protocol == 'file:') {
+      jasmine.log('This test fails with google-chrome if not started with --allow-file-access-from-files');
+    }
     var response = smoax.ajax({type:'get', url:'../spec/smoax-spec.js', async:false});
     expect(response.responseText).toMatch(/^describe\('smoax/);
   });
@@ -103,5 +106,4 @@ describe('smoax', function() {
     $.get('/url').success(function(data) { expect(data).toEqual('foo'); });
     expect(smoax.calls.count).toEqual(1);
   });
-
 });
