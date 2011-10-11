@@ -31,12 +31,6 @@ See the [tests](https://github.com/mtkopone/smoax/blob/master/spec/smoax-spec.js
 
 ## Details, details
 
-`smoax.register(method, url, responseData)` takes three parameters:
-
-1.  The HTTP method: GET, POST, PUT, etc.
-2.  The URL of the request
-3.  A response body to provide when the the ajax gets invoked. This can be either a string, a javascript object or a function that returns one of the previous types.
-
 `this.addMatchers(smoax.setup())` registers the following Jasmine matchers:
 
 *  `expect(smoax).toHaveBeenInvoked()`
@@ -51,6 +45,12 @@ See the [tests](https://github.com/mtkopone/smoax/blob/master/spec/smoax-spec.js
 
     checks that the latest ajax call matches the parameters.
 
+`smoax.register(method, url, responseData)` takes three parameters:
+
+1.  The HTTP method: GET, POST, PUT, etc.
+2.  The URL of the request
+3.  A response body to provide when the the ajax gets invoked. This can be either a string, a javascript object or a function that returns one of the previous types.
+
 `smoax.registerError(method, url, statusCode, statusText, responseData)` may be used to test error conditions. It takes the following parameters:
 
 1.  The HTTP method: GET, POST, PUT, etc.
@@ -58,6 +58,8 @@ See the [tests](https://github.com/mtkopone/smoax/blob/master/spec/smoax-spec.js
 3.  The HTTP status code to return  
 4.  The HTTP status text to return
 5.  A response body to provide when the the ajax gets invoked. This can be either a string, a javascript object or a function that returns one of the previous types.
+
+`smoax.register()` and `smoax.registerError()` can also be used without the `method` and `url` parameters, in which case the response is used as a reply to all ajax calls.
 
 `smoax.calls` contains details of all intercepted ajax calls and a `count` variable telling how many ajax calls have been intercepted.
 
