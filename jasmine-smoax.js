@@ -4,7 +4,7 @@ function Smoax() {
   var me = this;
   this.ajax = $.ajax;
   $.ajaxTransport('mock', mockAjaxTransport);
-  
+
   this.setup = function() {
     this.latest = undefined;
     this.handlers = new AjaxMap();
@@ -12,7 +12,7 @@ function Smoax() {
     spyOn($, 'ajax').andCallFake(wrap);
     return this.matchers;
   }
-  
+
   function mockAjaxTransport(options, originalOptions, jqXHR) {
     var abort = false;
     options.dataType = originalOptions.originalDataType;
@@ -24,11 +24,11 @@ function Smoax() {
         me.calls.set(options.type, options.url, options);
         var handler = me.handlers.get(options.type, options.url);
         if (!!handler) {
-          var responses = { text:toText(handler.response) }; 
+          var responses = { text:toText(handler.response) };
           //, xml:jQuery.parseXML(handler.response) };
           function done() {
-            complete(handler.statusCode, handler.statusText, responses, '');              
-          }          
+            complete(handler.statusCode, handler.statusText, responses, '');
+          }
           if (handler.async && options.async) {
             setTimeout(done, 0);
           } else {
@@ -45,7 +45,7 @@ function Smoax() {
   function toParams(data) {
     if ($.isFunction(data)) {
       data = data();
-    } 
+    }
     if ($.isArray(data) || $.isPlainObject(data)) {
       return jQuery.param(data, jQuery.ajaxSettings.traditional);
     } else {
@@ -90,17 +90,17 @@ function Smoax() {
     var data = { statusCode:statusCode, statusText:statusText, response:response };
     return _register(method, url, data);
   }
-  
+
   function warn(s) {
     jasmine.log('smoax: '+s);
   }
-  
+
   this.matchers = {
     toHaveBeenInvoked: function() {
       this.message = function() { return [
           "Expected ajax to have been invoked.",
           "Expected ajax not to have been invoked."
-      ]; };      
+      ]; };
       return me.latest !== undefined;
     },
     latestInvocationToHaveBeen: function(method, url, data) {
@@ -135,7 +135,7 @@ function Smoax() {
       "Expected "+desc+" not to have been invoked with "+jasmine.pp(expectedData)
     ]; };
   }
-  
+
   function match(that, opts, method, url, data) {
     var requestMatch =  !!opts && !!opts.type
       && method.toUpperCase() == opts.type.toUpperCase()
@@ -153,7 +153,7 @@ function Smoax() {
   function key(method, url) {
     return method.toUpperCase()+' '+url.replace(/\?_=\d+/, '');
   }
-  
+
   function AjaxMap() {
     this.count = 0;
     this.map = {};
@@ -170,7 +170,7 @@ function Smoax() {
     }
     return this;
   }
-  
+
   return this;
 };
 
