@@ -8,24 +8,28 @@
 1.  Download [jasmine-smoax.js](https://raw.github.com/mtkopone/smoax/master/jasmine-smoax.js)
 2.  Add it to the Jasmine SpecRunner.html:
 
-        <script src="jasmine-smoax.js"></script>
+```html
+<script src="jasmine-smoax.js"></script>
+```
 
 3.  Use it:
 
-        describe('my spec', function() {
-            beforeEach(function() {
-                // Initialise smoax and register the matchers
-                this.addMatchers(smoax.setup());
-            });
-            it('calls some ajax stuff', function() {
-                // Register expected ajax calls and the responses that they should return
-                smoax.register('GET', '/my/url.json', { data:'yeah' });
-                // Call the javascript-under-test that invokes ajax
-                myProductionCode.someMethod();
-                // Check that appropriate ajax calls were invoked
-                expect(smoax).toHaveBeenInvokedWith('get', '/my/url.json');
-            });
-        });
+```javascript
+describe('my spec', function() {
+    beforeEach(function() {
+        // Initialise smoax and register the matchers
+        this.addMatchers(smoax.setup());
+    });
+    it('calls some ajax stuff', function() {
+        // Register expected ajax calls and the responses that they should return
+        smoax.register('GET', '/my/url.json', { data:'yeah' });
+        // Call the javascript-under-test that invokes ajax
+        myProductionCode.someMethod();
+        // Check that appropriate ajax calls were invoked
+        expect(smoax).toHaveBeenInvokedWith('get', '/my/url.json');
+    });
+});
+```
 
 See the [tests](https://github.com/mtkopone/smoax/blob/master/spec/smoax-spec.js) for more examples of usage.
 
