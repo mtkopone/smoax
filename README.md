@@ -5,14 +5,14 @@
 
 ## Usage
 
-1.  Download [jasmine-smoax.js](https://raw.github.com/mtkopone/smoax/master/jasmine-smoax.js)
-2.  Add it to the Jasmine SpecRunner.html:
+1. Download [jasmine-smoax.js](https://raw.github.com/mtkopone/smoax/master/jasmine-smoax.js)
+2. Add it to the Jasmine SpecRunner.html:
 
 ```html
 <script src="jasmine-smoax.js"></script>
 ```
 
-3.  Use it:
+3. Use it:
 
 ```javascript
 describe('my spec', function() {
