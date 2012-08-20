@@ -6,6 +6,7 @@
 ## Usage
 
 Download [jasmine-smoax.js](https://raw.github.com/mtkopone/smoax/master/jasmine-smoax.js)
+
 Add it to the Jasmine SpecRunner.html:
 
 ```html
