@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>smoax - mocha tests</title>
+  <link href="../node_modules/mocha/mocha.css" rel="stylesheet" />
+  <script src="jquery-1.8.1.min.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
+  <script src="../node_modules/chai-jquery/chai-jquery.js"></script>
+  <script src="../smoax.js"></script>
+  <script>
+    mocha.setup({ ui:'bdd' })
+  </script>
+  <script src="mocha-test.js"></script>
+  <script>$(mocha.run)</script>
+</head>
+<body>
+  <div id="mocha"></div>
+</body>
+</html>

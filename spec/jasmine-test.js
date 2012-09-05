@@ -81,12 +81,15 @@ describe('smoax', function() {
   
   it('can also play async', function() {
     smoax.registerAsync('get', '/url', { data: "yeah" })
-    var called = false
+    var response = undefined
     $.get('/url', function(resp) {
-      called = true
+      response = resp
+    }, 'json')
+    expect(response).not.toBeDefined()
+    waitsFor(function() { return !!response }, 1000)
+    runs(function() {
+      expect(response.data).toEqual('yeah')
     })
-    expect(called).toEqual(false)
-    waitsFor(function() { return called }, 1000)
   })
   
   it('exposes real ajax', function() {
@@ -121,7 +124,7 @@ describe('smoax', function() {
     $.get('/first')
     $.post('/second')
     var obj = {}
-    var result = smoax.matchers.toHaveBeenInvokedWith.call(obj, 'get', '/second')
+    var result = smoax.jasmineMatchers.toHaveBeenInvokedWith.call(obj, 'get', '/second')
     expect(result).toEqual(false)
     expect(obj.message()[0]).toEqual('Expected GET /second to have been invoked. There have been calls to: GET /first, POST /second')
     expect(obj.message()[1]).toEqual('Expected GET /second not to have been invoked. There have been calls to: GET /first, POST /second')
@@ -130,7 +133,7 @@ describe('smoax', function() {
   it('uses readable error messages when data doesnt match expected', function() {
     $.post('/second', { data:'ok' })
     var obj = {}
-    var result = smoax.matchers.toHaveBeenInvokedWith.call(obj, 'post', '/second', { data:'fail' })
+    var result = smoax.jasmineMatchers.toHaveBeenInvokedWith.call(obj, 'post', '/second', { data:'fail' })
     expect(result).toEqual(false)
     expect(obj.message()[0]).toEqual("Expected POST /second to have been invoked with 'data=fail' but was invoked with 'data=ok'")
     expect(obj.message()[1]).toEqual("Expected POST /second not to have been invoked with 'data=fail'")
