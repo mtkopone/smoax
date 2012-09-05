@@ -4,6 +4,13 @@
 *  Requires jQuery 1.6+ and either Jasmine 1.0.2+ or some recent Mocha + Chai setup.
 *  Works with both ye-olde-style ajax success and error handlers and jQuery 1.5 deferreds.
 
+# But Why?
+
+Yeah, the world is full of ways to mock jQuery $.ajax.
+
+Most of them do too much. I want jQuery itself to handle response content types, fire globally registered callbacks and such.
+So, instead of completely replacing $.ajax, smoax just provides an alternative ajax transport to jQuery and a tiny wrapper function around $.ajax to mark requests as going to said transport.
+
 # Get It
 
 Download [smoax.js](https://raw.github.com/mtkopone/smoax/master/smoax.js)
