@@ -134,7 +134,9 @@ See the [tests](https://github.com/mtkopone/smoax/blob/master/test/jasmine-test.
 
 `smoax.release()` reverts `$.ajax` back to it's original form.
 
-By default, smoax *synchronously* calls the success and error handlers of an ajax invocation. This is generally good enough, and simplifies test writing by not requiring all test code to be within `runs()` and `waitsFor()` blocks. In some special cases, asynchronous behaviour could be required, and can be enabled by using `smoax.registerAsync()`. It takes the same arguments as `smoax.register()`.
+By default, smoax *synchronously* calls the success and error handlers of an ajax invocation. This is generally good enough, and simplifies test writing by not requiring all test code to become asyncronous. In some special cases, asynchronous behaviour might be nice, and can be enabled with
+`smoax.registerAsync(method, url, responseData, timeout)`
+The arguments are the same as for `smoax.register`, with an optional delay in milliseconds to wait before sending the response. Defaults to 0.
 
 Use `smoax.ajax()` instead of `$.ajax()` to access a non-mocked version of `jQuery.ajax()` during tests to e.g. load example data from files.
 

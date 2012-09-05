@@ -33,8 +33,8 @@ function Smoax() {
           function done() {
             complete(handler.statusCode, handler.statusText, responses, '')
           }
-          if (handler.async && options.async) {
-            setTimeout(done, 0)
+          if (handler.async !== undefined && options.async) {
+            setTimeout(done, handler.async)
           } else {
             done()
           }
@@ -84,9 +84,9 @@ function Smoax() {
     var data = { statusCode:200, statusText:'success', response:response }
     return _register(method, url, data)
   }
-  this.registerAsync = function(method, url, response) {
-    if (!url) { response = method; method = url = '*' }
-    var data = { statusCode:200, statusText:'success', response:response, async:true }
+  this.registerAsync = function(method, url, response, timeout) {
+    if (!response) { response = method; timeout = url; method = url = '*' }
+    var data = { statusCode:200, statusText:'success', response:response, async:timeout || 0 }
     return _register(method, url, data)
   }
   this.registerError = function(method, url, statusCode, statusText, response) {

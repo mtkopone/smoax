@@ -86,19 +86,37 @@ describe('smoax', function() {
     expect(smoax.latest.url).toEqual('/url?im=latest')
   })
 
+
   it('can also play async', function() {
     smoax.registerAsync('get', '/url', { data: "yeah" })
-    var response = undefined
+    var response = undefined, duration = undefined, pre = (new Date()).getTime()
     $.get('/url', function(resp) {
+      duration = (new Date()).getTime() - pre
       response = resp
     }, 'json')
     expect(response).not.toBeDefined()
     waitsFor(function() { return !!response }, 1000)
     runs(function() {
       expect(response.data).toEqual('yeah')
+      expect(duration).toBeLessThan(20)
     })
   })
-  
+
+  it('can delay when async', function() {
+    smoax.registerAsync('get', '/url', 'slowly', 100)
+    var response = undefined, duration = undefined, pre = (new Date()).getTime()
+    $.get('/url', function(resp) {
+      duration = (new Date()).getTime() - pre
+      response = resp
+    })
+    waitsFor(function() { return !!response }, 1000)
+    runs(function() {
+      expect(response).toEqual('slowly')
+      expect(duration).toBeGreaterThan(100)
+    })
+  })
+
+
   it('exposes real ajax', function() {
     if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && document.location.protocol == 'file:') {
       jasmine.log('This test fails with google-chrome if not started with --allow-file-access-from-files')

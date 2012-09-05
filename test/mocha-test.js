@@ -92,10 +92,24 @@ describe('smoax', function() {
 
   it('can also play async', function(done) {
     smoax.registerAsync('get', '/url', { data: "yeah" })
+    var pre = (new Date()).getTime()
     $.get('/url', function(resp) {
+      var duration = (new Date()).getTime() - pre
+      expect(duration).to.be.below(20)
       expect(resp.data).to.equal('yeah')
       done()
     }, 'json')
+  })
+
+  it('can delay when async', function(done) {
+    smoax.registerAsync('get', '/url', 'slowly', 100)
+    var pre = (new Date()).getTime()
+    $.get('/url', function(resp) {
+      var duration = (new Date()).getTime() - pre
+      expect(duration).to.be.above(100)
+      expect(resp).to.equal('slowly')
+      done()
+    })
   })
 
   it('exposes real ajax', function() {
