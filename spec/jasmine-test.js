@@ -109,6 +109,14 @@ describe('smoax', function() {
     expect(smoax.calls.count).toEqual(1)
   })
 
+  it('can assert latest ajax', function() {
+    $.post('/first', { foo:'bar' })
+    $.post('/second', { data:'ok' })
+    expect(smoax).latestInvocationToHaveBeen('POST', '/second', { data:'ok'})
+    $.get('/third')
+    expect(smoax).latestInvocationToHaveBeen('GET', '/third')
+  })
+
   it('uses readable error messages when method and url doesnt match expected', function() {
     $.get('/first')
     $.post('/second')

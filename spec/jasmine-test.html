@@ -11,8 +11,10 @@
 </head>
 <body>
 <script type="text/javascript">
-  jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
-  $(function() { jasmine.getEnv().execute(); })
+  var reporter = new jasmine.TrivialReporter()
+  jasmine.getEnv().specFilter = function(spec) { return reporter.specFilter(spec) }
+  jasmine.getEnv().addReporter(reporter)
+  $(function() { jasmine.getEnv().execute() })
 </script>
 </body>
 </html>
