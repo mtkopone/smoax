@@ -2,19 +2,20 @@
 <html>
 <head>
   <title>smoax - jasmine tests</title>
-  <link rel="stylesheet" type="text/css" href="jasmine-1.0.2/jasmine.css">
+  <link rel="stylesheet" type="text/css" href="jasmine-1.2.0/jasmine.css">
   <script src="jquery-1.8.1.min.js"></script>
-  <script src="jasmine-1.0.2/jasmine.js"></script>
-  <script src="jasmine-1.0.2/jasmine-html.js"></script>
+  <script src="jasmine-1.2.0/jasmine.js"></script>
+  <script src="jasmine-1.2.0/jasmine-html.js"></script>
   <script src="../smoax.js"></script>
   <script src="jasmine-test.js"></script>
 </head>
 <body>
 <script type="text/javascript">
-  var reporter = new jasmine.TrivialReporter()
-  jasmine.getEnv().specFilter = function(spec) { return reporter.specFilter(spec) }
-  jasmine.getEnv().addReporter(reporter)
-  $(function() { jasmine.getEnv().execute() })
+  var env = jasmine.getEnv()
+  var reporter = new jasmine.HtmlReporter()
+  env.specFilter = function(spec) { return reporter.specFilter(spec) }
+  env.addReporter(reporter)
+  $(function() { env.execute() })
 </script>
 </body>
 </html>
