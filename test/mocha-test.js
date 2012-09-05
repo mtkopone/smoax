@@ -83,6 +83,13 @@ describe('smoax', function() {
     expect(smoax.calls.count).to.equal(1)
   })
 
+  it('keeps track of latest ajax call', function() {
+    $.get('/url', { 'im':'latest' }, function() {})
+    expect(smoax.latest).to.exist
+    expect(smoax.latest.type).to.equal('GET')
+    expect(smoax.latest.url).to.equal('/url?im=latest')
+  })
+
   it('can also play async', function(done) {
     smoax.registerAsync('get', '/url', { data: "yeah" })
     $.get('/url', function(resp) {
