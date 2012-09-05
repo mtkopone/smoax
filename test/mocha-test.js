@@ -28,14 +28,24 @@ describe('smoax', function() {
 
   it('handles $.post', function() {
     smoax.register('post', '/url', { data: "yeah" })
-    var gotSyncCall = false
     $.post('/url', { request: true }, function(resp) {
-      gotSyncCall = true
       expect(resp.data).to.equal('yeah')
+      expect(smoax).to.have.beenInvokedWith('post', '/url', { request:true })
+      expect(smoax).not.to.have.beenInvokedWith('post', '/url', { request:false })
     }, 'json')
-    expect(gotSyncCall).to.equal(true)
-    expect(smoax).to.have.beenInvokedWith('post', '/url', { request:true })
-    expect(smoax).not.to.have.beenInvokedWith('post', '/url', { request:false })
+  })
+
+  it('handles generic ajax response', function(done) {
+    smoax.register('pow!')
+    $.get('/url').success(function(resp) {
+      expect(resp).to.equal('pow!')
+      $.post('/url').success(function(resp) {
+        expect(resp).to.equal('pow!')
+        expect(smoax).to.have.beenInvokedWith('get', '/url')
+        expect(smoax).to.have.beenInvokedWith('post', '/url')
+        done()
+      })
+    })
   })
 
   it('handles error callback', function() {
@@ -55,6 +65,23 @@ describe('smoax', function() {
     expect(errorGotCalled).to.equal(true)
     expect(smoax).to.have.beenInvoked()
     expect(smoax).to.have.beenInvokedWith('get', '/url')
+  })
+
+  it('handles generic ajax error response', function(done) {
+    smoax.registerError(418, 'teapot!')
+    $.get('/url').error(function(xhr, txt, err) {
+      expect(xhr.status).to.equal(418)
+      expect(txt).to.equal('error')
+      expect(err).to.equal('teapot!')
+      $.post('/other-url').error(function(xhr, txt, err) {
+        expect(xhr.status).to.equal(418)
+        expect(txt).to.equal('error')
+        expect(err).to.equal('teapot!')
+        expect(smoax).to.have.beenInvokedWith('get', '/url')
+        expect(smoax).to.have.beenInvokedWith('post', '/other-url')
+        done()
+      })
+    })
   })
 
   it('handles multiple deferred success callbacks', function() {
@@ -108,6 +135,19 @@ describe('smoax', function() {
       var duration = (new Date()).getTime() - pre
       expect(duration).to.be.above(50)
       expect(resp).to.equal('slowly')
+      done()
+    })
+  })
+
+  it('can use async errors', function(done) {
+    smoax.registerAsyncError('get', '/teapot', 418, "I'm a teapot", {}, 50)
+    var pre = (new Date()).getTime()
+    $.get('/teapot').error(function(xhr, statusText, errorThrown) {
+      var duration = (new Date()).getTime() - pre
+      expect(duration).to.be.above(50)
+      expect(xhr.status).to.equal(418)
+      expect(statusText).to.equal('error')
+      expect(errorThrown).to.equal("I'm a teapot")
       done()
     })
   })

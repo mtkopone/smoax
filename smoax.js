@@ -94,6 +94,11 @@ function Smoax() {
     var data = { statusCode:statusCode, statusText:statusText, response:response }
     return _register(method, url, data)
   }
+  this.registerAsyncError = function(method, url, statusCode, statusText, response, timeout) {
+    if (!statusText) { timeout = statusText; response = statusCode; statusText = url; statusCode = method; method = url = '*' }
+    var data = { statusCode:statusCode, statusText:statusText, response:response , async:timeout || 0 }
+    return _register(method, url, data)
+  }
 
   function warn(s) {
     jasmine.log('smoax: '+s)
