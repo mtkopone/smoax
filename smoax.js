@@ -6,11 +6,11 @@ function Smoax() {
   $.ajaxTransport('mock', mockAjaxTransport)
 
   this.setup = function() {
-    this.latest = undefined
-    this.handlers = new AjaxMap()
-    this.calls = new AjaxMap()
+    me.latest = undefined
+    me.handlers = new AjaxMap()
+    me.calls = new AjaxMap()
     $.ajax = wrap
-    return this.matchers
+    return me.matchers
   }
 
   this.release = function() {
@@ -68,16 +68,16 @@ function Smoax() {
     }
   }
 
-  function wrap(opts) {
+  function wrap(opts, settings) {
     var allOpts = jQuery.ajaxSetup({}, opts)
     opts.originalDataType = allOpts.dataType
     opts.dataType = 'mock'
-    return me.ajax(opts)
+    return me.ajax(opts, settings)
   }
 
   function _register(method, url, data) {
     me.handlers.set(method, url, data)
-    return this
+    return me
   }
   this.register = function(method, url, response) {
     if (!url) { response = method; method = url = '*' }
