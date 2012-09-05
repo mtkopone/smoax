@@ -128,4 +128,9 @@ describe('smoax', function() {
     expect(obj.message()[1]).toEqual("Expected POST /second not to have been invoked with 'data=fail'")
   })
 
+  it('releases $.ajax', function() {
+    expect($.ajax.toString().length).toBeLessThan(200)
+    smoax.release()
+    expect($.ajax.toString().length).toBeGreaterThan(3000)
+  })
 })

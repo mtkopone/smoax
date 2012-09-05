@@ -9,8 +9,12 @@ function Smoax() {
     this.latest = undefined
     this.handlers = new AjaxMap()
     this.calls = new AjaxMap()
-    spyOn($, 'ajax').andCallFake(wrap)
+    $.ajax = wrap
     return this.matchers
+  }
+
+  this.release = function() {
+    $.ajax = me.ajax
   }
 
   function mockAjaxTransport(options, originalOptions, jqXHR) {
