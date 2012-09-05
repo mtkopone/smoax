@@ -41,7 +41,7 @@ describe('my spec', function() {
 });
 ```
 
-See the [tests](https://github.com/mtkopone/smoax/blob/master/spec/mocha-test.js) for more examples of usage.
+See the [tests](https://github.com/mtkopone/smoax/blob/master/test/mocha-test.js) for more examples of usage.
 
 ### Chai Expect Matchers
 
@@ -87,7 +87,7 @@ describe('my spec', function() {
 });
 ```
 
-See the [tests](https://github.com/mtkopone/smoax/blob/master/spec/jasmine-test.js) for more examples of usage.
+See the [tests](https://github.com/mtkopone/smoax/blob/master/test/jasmine-test.js) for more examples of usage.
 
 ### Jasmine Matchers
 
