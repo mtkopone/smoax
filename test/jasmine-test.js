@@ -103,7 +103,7 @@ describe('smoax', function() {
   })
 
   it('can delay when async', function() {
-    smoax.registerAsync('get', '/url', 'slowly', 100)
+    smoax.registerAsync('get', '/url', 'slowly', 50)
     var response = undefined, duration = undefined, pre = (new Date()).getTime()
     $.get('/url', function(resp) {
       duration = (new Date()).getTime() - pre
@@ -112,7 +112,7 @@ describe('smoax', function() {
     waitsFor(function() { return !!response }, 1000)
     runs(function() {
       expect(response).toEqual('slowly')
-      expect(duration).toBeGreaterThan(100)
+      expect(duration).toBeGreaterThan(50)
     })
   })
 

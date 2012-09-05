@@ -43,7 +43,7 @@ describe('smoax', function() {
     var successGotCalled = false
     var errorGotCalled = false
     $.ajax({ type: 'get', url: '/url',
-      success: function(data) { successGotCalled = true },
+      success: function() { successGotCalled = true },
       error: function(xhr, statusText, errorThrown) {
         errorGotCalled = true
         expect(xhr.status).to.equal(404)
@@ -102,11 +102,11 @@ describe('smoax', function() {
   })
 
   it('can delay when async', function(done) {
-    smoax.registerAsync('get', '/url', 'slowly', 100)
+    smoax.registerAsync('get', '/url', 'slowly', 50)
     var pre = (new Date()).getTime()
     $.get('/url', function(resp) {
       var duration = (new Date()).getTime() - pre
-      expect(duration).to.be.above(100)
+      expect(duration).to.be.above(50)
       expect(resp).to.equal('slowly')
       done()
     })
