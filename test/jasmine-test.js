@@ -119,7 +119,7 @@ describe('smoax', function() {
 
   it('exposes real ajax', function() {
     if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && document.location.protocol == 'file:') {
-      jasmine.log('This test fails with google-chrome if not started with --allow-file-access-from-files')
+      smoax.warn('This test fails with google-chrome if not started with --allow-file-access-from-files')
     }
     var response = smoax.ajax({type:'get', url:'../test/jasmine-test.js', async:false})
     expect(response.responseText).toMatch(/^describe\('smoax/)

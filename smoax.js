@@ -2,6 +2,7 @@ var smoax = new Smoax()
 
 function Smoax() {
   var me = this
+  var isJasmine = !!window.jasmine
   this.ajax = $.ajax
   $.ajaxTransport('mock', mockAjaxTransport)
 
@@ -10,7 +11,7 @@ function Smoax() {
     me.handlers = new AjaxMap()
     me.calls = new AjaxMap()
     $.ajax = wrap
-    return window.jasmine ? me.jasmineMatchers : me.chaiMatchers
+    return isJasmine ? me.jasmineMatchers : me.chaiMatchers
   }
 
   this.release = function() {
@@ -39,7 +40,7 @@ function Smoax() {
             done()
           }
         } else {
-          warn('No mock ajax registered for '+options.type+' '+options.url)
+          me.warn('No mock ajax registered for '+options.type+' '+options.url)
         }
       },
       abort: function() { abort = true }
@@ -100,8 +101,8 @@ function Smoax() {
     return _register(method, url, data)
   }
 
-  function warn(s) {
-    jasmine.log('smoax: '+s)
+  this.warn = function(s) {
+      isJasmine ? jasmine.log('smoax: '+s) : console.warn('smoax: '+s)
   }
 
   this.chaiMatchers = function(chai, utils) {
