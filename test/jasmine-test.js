@@ -81,9 +81,9 @@ describe('smoax', function() {
 
   it('keeps track of latest ajax call', function() {
     $.get('/url', { 'im':'latest' }, function() {})
-    expect(smoax.latest).toBeDefined()
-    expect(smoax.latest.type).toEqual('GET')
-    expect(smoax.latest.url).toEqual('/url?im=latest')
+    expect(smoax.calls.latest).toBeDefined()
+    expect(smoax.calls.latest.type).toEqual('GET')
+    expect(smoax.calls.latest.url).toEqual('/url?im=latest')
   })
 
 
@@ -116,7 +116,6 @@ describe('smoax', function() {
     })
   })
 
-
   it('exposes real ajax', function() {
     if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && document.location.protocol == 'file:') {
       smoax.warn('This test fails with google-chrome if not started with --allow-file-access-from-files')
@@ -135,6 +134,20 @@ describe('smoax', function() {
     smoax.register('get', '/url', function() { return 'foo' })
     $.get('/url').success(function(data) { expect(data).toEqual('foo') })
     expect(smoax.calls.count).toEqual(1)
+  })
+
+  it('can assert all called ajaxes', function() {
+    $.get('/url')
+    $.get('/url', { key:'value' })
+    $.get('/url?foo=bar')
+    expect(smoax).toHaveBeenInvokedWith('get', '/url')
+    expect(smoax).toHaveBeenInvokedWith('get', '/url?key=value')
+    expect(smoax).toHaveBeenInvokedWith('get', '/url?foo=bar')
+  })
+
+  it('cant handle get data as object', function() {
+    $.get('/url', { key:'value' })
+    expect(smoax).not.toHaveBeenInvokedWith('get', '/url', { key:'value' })
   })
 
   it('can assert latest ajax', function() {

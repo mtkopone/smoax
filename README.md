@@ -130,7 +130,7 @@ See the [tests](https://github.com/mtkopone/smoax/blob/master/test/jasmine-test.
 
 `smoax.register()` and `smoax.registerError()` can also be used without the `method` and `url` parameters, in which case the response is used as a reply to all ajax calls.
 
-`smoax.calls` contains details of all intercepted ajax calls and a `count` variable telling how many ajax calls have been intercepted.
+`smoax.calls` contains details of all intercepted ajax calls, a `latest` variable pointing to the latest one and a `count` variable telling how many ajax calls have been intercepted.
 
 `smoax.release()` reverts `$.ajax` back to it's original form.
 
@@ -139,6 +139,12 @@ By default, smoax *synchronously* calls the success and error handlers of an aja
 The arguments are the same as for `smoax.register` and `smoax.registerError`, with an optional delay in milliseconds to wait before sending the response. Defaults to 0.
 
 Also, use `smoax.ajax()` instead of `$.ajax()` to access a non-mocked version of `jQuery.ajax()` during tests to e.g. load example data from files.
+
+## Caveats
+
+jQuery automagically serialises GET "data" into the URL before $.ajax gets called, so this won't work `expect(smoax).to.have.beenInvokedWith('get', '/url', { key:'value' })`.
+Use `expect(smoax).to.have.beenInvokedWith('get', '/url?key=value')` instead.
+
 
 ## ---
 

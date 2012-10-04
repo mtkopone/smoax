@@ -112,9 +112,9 @@ describe('smoax', function() {
 
   it('keeps track of latest ajax call', function() {
     $.get('/url', { 'im':'latest' }, function() {})
-    expect(smoax.latest).to.exist
-    expect(smoax.latest.type).to.equal('GET')
-    expect(smoax.latest.url).to.equal('/url?im=latest')
+    expect(smoax.calls.latest).to.exist
+    expect(smoax.calls.latest.type).to.equal('GET')
+    expect(smoax.calls.latest.url).to.equal('/url?im=latest')
   })
 
   it('can also play async', function(done) {
@@ -170,6 +170,20 @@ describe('smoax', function() {
     smoax.register('get', '/url', function() { return 'foo' })
     $.get('/url').success(function(data) { expect(data).to.equal('foo') })
     expect(smoax.calls.count).to.equal(1)
+  })
+
+  it('can assert all called ajaxes', function() {
+    $.get('/url')
+    $.get('/url', { key:'value' })
+    $.get('/url?foo=bar')
+    expect(smoax).to.have.beenInvokedWith('get', '/url')
+    expect(smoax).to.have.beenInvokedWith('get', '/url?key=value')
+    expect(smoax).to.have.beenInvokedWith('get', '/url?foo=bar')
+  })
+
+  it('cant handle get data as object', function() {
+    $.get('/url', { key:'value' })
+    expect(smoax).not.to.have.beenInvokedWith('get', '/url', { key:'value' })
   })
 
   it('can assert latest ajax', function() {
