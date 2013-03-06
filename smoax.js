@@ -32,7 +32,14 @@ function Smoax() {
           function done() {
             complete(handler.statusCode, handler.statusText, responses, '')
           }
-          if (handler.async !== undefined && options.async) {
+          if (handler.promise) {
+            handler.promise.done(function(response) {
+              complete(200, 'success', { text:toText(response) }, '')
+            });
+            handler.promise.fail(function(errorOptions) {
+              complete(errorOptions.statusCode, errorOptions.statusText, { text:toText(errorOptions.response) }, '')
+            })
+          } else if (handler.async !== undefined && options.async) {
             setTimeout(done, handler.async)
           } else {
             done()
@@ -82,6 +89,11 @@ function Smoax() {
     if (!url) { response = method; method = url = '*' }
     var data = { statusCode:200, statusText:'success', response:response }
     return _register(method, url, data)
+  }
+  this.registerDeferred = function(method, url) {
+    var deferred = $.Deferred()
+    _register((method || '*'), ((method && url) || '*'), { promise: deferred.promise() })
+    return deferred;
   }
   this.registerAsync = function(method, url, response, timeout) {
     if (!response) { response = method; timeout = url; method = url = '*' }
