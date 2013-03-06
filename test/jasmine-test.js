@@ -116,6 +116,30 @@ describe('smoax', function() {
     })
   })
 
+  it('can register a deferred call for finer grained control', function() {
+    var deferred = smoax.registerDeferred()
+    var response = undefined
+    $.get('/url', function(resp) {
+      response = resp
+    })
+    deferred.resolve("response")
+    expect(response).toEqual("response")
+  });
+
+  it('invokes error callback whenever the deferred object errors', function() {
+    var deferred = smoax.registerDeferred('get', '/url')
+    var response = undefined
+    var error = undefined
+    $.get('/url', function(resp) { response = resp })
+     .fail(function(err) { error = err })
+    deferred.reject({
+      statusCode: 400,
+      statusText: "notfound"
+    })
+    expect(error.statusText).toEqual("notfound");
+    expect(response).not.toBeDefined();
+  });
+
   it('exposes real ajax', function() {
     if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && document.location.protocol == 'file:') {
       smoax.warn('This test fails with google-chrome if not started with --allow-file-access-from-files')

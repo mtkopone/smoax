@@ -130,6 +130,18 @@ See the [tests](https://github.com/mtkopone/smoax/blob/master/test/jasmine-test.
 
 `smoax.register()` and `smoax.registerError()` can also be used without the `method` and `url` parameters, in which case the response is used as a reply to all ajax calls.
 
+`smoax.registerDeferred(method, url)` will return a [deferred object](http://api.jquery.com/category/deferred-object/) that allows finer-grained control of when and how the ajax call will return. Resolving the deferred signals an ajax response with a status code of 200, whereas calling `.reject()` on the object will return an ajax error:
+
+```javascript
+  var deferred = smoax.registerDeferred()
+  deferred.reject({
+    statusCode: 400,
+    statusText: "notfound"
+  })
+```
+
+Caveat: the deferred object will only respond to a single ajax call when it is resolved or fails. Once the initial ajax call has been started, further deferreds can be registered for subsequent calls.
+
 `smoax.calls` contains details of all intercepted ajax calls, a `latest` variable pointing to the latest one and a `count` variable telling how many ajax calls have been intercepted.
 
 `smoax.release()` reverts `$.ajax` back to it's original form.
